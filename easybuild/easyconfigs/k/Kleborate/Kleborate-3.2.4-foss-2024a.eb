@@ -1,0 +1,52 @@
+easyblock = 'PythonBundle'
+
+name = 'Kleborate'
+version = '3.2.4'
+
+homepage = 'https://github.com/klebgenomics/Kleborate'
+description = 'Tool to screen Klebsiella genome assemblies for MLST, virulence and AMR determinants'
+
+toolchain = {'name': 'foss', 'version': '2024a'}
+
+
+dependencies = [
+    ('Python', '3.12.3'),
+    ('Biopython', '1.84'),
+    ('SciPy-bundle', '2024.05'),
+    ('matplotlib', '3.9.2'),
+    ('minimap2', '2.30'),
+    ('AMRFinderPlus', '4.0.23'),
+    ('Mash', '2.3'),
+]
+
+use_pip = True
+sanity_pip_check = True
+
+exts_list = [
+    ('dna-features-viewer', '3.1.5', {
+        'modulename': 'dna_features_viewer',
+        'preinstallopts': """sed -i 's/^license = "MIT"/license = {text = "MIT"}/' pyproject.toml && """,
+        'checksums': ['4740b018f7c45427054cb1403ff8b11209bcbe4ca9d5b77f28f14ed5ecb144c4'],
+    }),
+    ('kaptive', '3.1.0', {
+        'modulename': 'kaptive',
+        'checksums': ['d79d2ce5548f69e2e03a03f483bbc03222c915ef6556adabef0939433bb0b917'],
+    }),
+    ('kleborate', version, {
+        'modulename': 'kleborate',
+        'preinstallopts': "sed -i 's/,\"mash\"//' pyproject.toml && ",
+        'checksums': ['70fd75251e81f4ed500810f98345611d0a9c7a3db7c73e877c1d0261a80dc679'],
+    }),
+]
+
+sanity_check_paths = {
+    'files': ['bin/kleborate'],
+    'dirs': ['lib/python%(pyshortver)s/site-packages'],
+}
+
+sanity_check_commands = [
+    'kleborate --help',
+    "python -c 'import kleborate; import dna_features_viewer; import kaptive'",
+]
+
+moduleclass = 'bio'
