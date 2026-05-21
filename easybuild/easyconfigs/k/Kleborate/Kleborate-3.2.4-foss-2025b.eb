@@ -1,0 +1,45 @@
+# Kleborate-3.2.4-foss-2025b.eb
+easyblock = 'PythonBundle'
+
+name = 'Kleborate'
+version = '3.2.4'
+homepage = 'https://github.com/klebgenomics/Kleborate'
+description = 'Kleborate: a tool for typing and screening pathogen genome assemblies'
+
+toolchain = {'name': 'foss', 'version': '2025b'}
+
+dependencies = [
+    ('Python', '3.13.5', '', ('GCCcore', '14.3.0')),
+    ('Biopython', '1.86'),
+    ('minimap2', '2.30', '', ('GCCcore', '14.3.0')),
+    ('SciPy-bundle', '2025.07'),
+    ('matplotlib', '3.10.5'),
+    ('Mash', '2.3', '', ('GCC', '14.3.0')),
+    ('hatchling', '1.27.0', '', ('GCCcore', '14.3.0')),
+]
+
+exts_list = [
+    ('dna_features_viewer', '3.1.5', {
+        'source_tmpl': '%(name)s-%(version)s.tar.gz',
+        'checksums': ['4740b018f7c45427054cb1403ff8b11209bcbe4ca9d5b77f28f14ed5ecb144c4'],
+    }),
+    ('kaptive', '3.2.1', {
+        'source_tmpl': '%(name)s-%(version)s.tar.gz',
+        'checksums': ['9b83666360f8842c7bbeca6043e6d111e8eba9b29242424f652225d8f0ef50d0'],
+    }),
+    (name, version, {
+        'source_tmpl': 'kleborate-3.2.4.tar.gz',
+        'preinstallopts': "sed -i 's/,\"mash\"//' pyproject.toml && ",
+        'checksums': ['70fd75251e81f4ed500810f98345611d0a9c7a3db7c73e877c1d0261a80dc679'],
+    }),
+]
+
+use_pip = True
+exts_download_dep_fail = True
+sanity_pip_check = True
+
+sanity_check_commands = [
+    "kleborate --help",
+]
+
+moduleclass = 'bio'
