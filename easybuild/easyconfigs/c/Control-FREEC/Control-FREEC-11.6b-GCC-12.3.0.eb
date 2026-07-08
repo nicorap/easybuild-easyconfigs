@@ -1,0 +1,31 @@
+easyblock = 'MakeCp'
+
+name = 'Control-FREEC'
+version = '11.6b'
+
+homepage = 'https://github.com/BoevaLab/FREEC'
+description = """Control-FREEC is a tool for detection of copy-number changes and
+allelic imbalances (including loss of heterozygosity, LOH) using deep-sequencing data."""
+
+toolchain = {'name': 'GCC', 'version': '12.3.0'}
+
+source_urls = ['https://github.com/BoevaLab/FREEC/archive/refs/tags/']
+sources = ['v%(version)s.tar.gz']
+checksums = ['be3927307f632b7f70513dc9d5851685e03d25a1b26b52e1f996f92a89ab3c6d']
+
+# FREEC's Makefile is in src/; build there but copy from the top-level dir
+buildopts = '-C src CC="$CXX"'
+
+files_to_copy = [
+    (['src/freec'], 'bin'),
+    'scripts',
+]
+
+sanity_check_paths = {
+    'files': ['bin/freec'],
+    'dirs': ['scripts'],
+}
+
+sanity_check_commands = ["freec 2>&1 | grep -qi freec"]
+
+moduleclass = 'bio'
