@@ -1,0 +1,24 @@
+easyblock = 'ContainerStack'
+
+name = 'python-alpine-container'
+version = '3.13'
+
+homepage = 'https://hub.docker.com/_/python'
+description = "Official Python 3.13 image on Alpine Linux (ContainerStack example: deployed as .sqsh + .sif)."
+
+toolchain = SYSTEM
+
+image = 'docker.io/library/python'
+# per-architecture manifest digests of docker.io/library/python:3.13-alpine (resolved 2026-11-07)
+digests = {
+    'aarch64': 'sha256:9cf2fdca7b3dd6082fd160ff5b8664f108c7441e200018a36554b2e8028f45df',
+    'x86_64': 'sha256:d76f585fb0d5107dd47143da5e61554fd9cae656a30f3470f815cb8475769b6a',
+}
+launchers = {'pyalp': 'python3'}
+smoke_tests = [
+    ('cpu', 'python3 -c "import sys; assert sys.version_info[:2] == (3, 13)"'),
+]
+
+osdependencies = ['apptainer', 'enroot', 'squashfs-tools']
+
+moduleclass = 'tools'
